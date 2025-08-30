@@ -1,3 +1,8 @@
+/**
+ * OpenAI Realtime API Client
+ * Provides WebRTC and WebSocket connections to OpenAI's realtime API
+ */
+
 import { EventEmitter } from "eventemitter3";
 
 export interface OpenAIRealtimeEventTypes {
@@ -54,7 +59,8 @@ export class OpenAIRealtimeClient extends EventEmitter<OpenAIRealtimeEventTypes>
 
   private async connectWebRTC(model: string, config: any): Promise<boolean> {
     try {
-      console.log("config.voice", config.voice);
+      console.log("WebRTC config received:", config);
+      console.log("WebRTC config.voice:", config.voice);
       // Get ephemeral token (in production, this should come from your backend)
       const ephemeralKey = await this.getEphemeralKey(model, config);
       this.initialConfig = config;
@@ -133,7 +139,8 @@ export class OpenAIRealtimeClient extends EventEmitter<OpenAIRealtimeEventTypes>
         this.emit("open");
         
         // Send session configuration
-          console.log("config.voice", config.voice);
+        console.log("WebSocket config received:", config);
+        console.log("WebSocket config.voice:", config.voice);
         this.send({
           type: "session.update",
           session: {
@@ -154,8 +161,7 @@ export class OpenAIRealtimeClient extends EventEmitter<OpenAIRealtimeEventTypes>
                 speed: 1.0
               }
             },
-            instructions: config.instructions || "You are a helpful assistant. Respond in the same language as the user.",
-            ...config
+            instructions: config.instructions || "You are a helpful assistant. Respond in the same language as the user."
           }
         });
         
@@ -196,12 +202,17 @@ export class OpenAIRealtimeClient extends EventEmitter<OpenAIRealtimeEventTypes>
     this.dc.onopen = () => {
       console.log("Data channel opened");
       if (this.initialConfig) {
+        console.log("Sending initial config via data channel:", this.initialConfig);
         this.send({
           type: "session.update",
           session: {
             type: "realtime",
-            audio: { output: { voice: this.initialConfig.voice || "marin" } },
-            instructions: this.initialConfig.instructions || "You are a helpful assistant.",
+            audio: { 
+              output: { 
+                voice: this.initialConfig.voice || "marin" 
+              } 
+            },
+            instructions: this.initialConfig.instructions || "You are a helpful assistant."
           }
         });
         this.initialConfig = null;
@@ -243,7 +254,7 @@ export class OpenAIRealtimeClient extends EventEmitter<OpenAIRealtimeEventTypes>
                 voice: config.voice || "marin",
               },
             },
-            ...config
+            instructions: config.instructions || "You are a helpful assistant. Respond in the same language as the user."
           },
         }),
       });
