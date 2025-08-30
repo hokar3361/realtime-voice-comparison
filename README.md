@@ -9,8 +9,8 @@ Gemini LiveとOpenAI Realtime APIの両方を統合したWebアプリケーシ�
 ## ✨ 主要機能
 
 ### 🤖 統合AI プロバイダー
-- **Gemini Live (2.0 Flash)** - Googleの最新リアルタイム音声対話API
-- **OpenAI Realtime (GPT-4o)** - OpenAIの最新リアルタイム音声対話API
+- **Gemini Live (gemini-2.5-flash-preview-native-audio-dialog)** - Googleの最新リアルタイム音声対話API
+- **OpenAI Realtime (gpt-realtime)** - OpenAIの最新リアルタイム音声対話API
 - 🔄 プロバイダーの簡単切り替え
 
 ### 🎵 音声機能
